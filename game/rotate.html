@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rotate Image on Hover</title>
+    <style>
+      body {
+        cursor: circle;
+      }
+      body {
+        overflow: hidden;
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f0f0;
+        cursor: none; /* Hides the cursor */
+
+        /* cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAM1BMVEX///8+/wD4//b6//hk/jf7//l2/k5D/gxl/jn9//z1//FK/hNQ/h5h/jJR/R5M/Rbz/+8GC81fAAABCklEQVR4nO3cwY6CMBiFUbCAjIj4/k87zrhmmhhN55Jz1v+iX5pSNtB1AAAAAAAAAAAAAAAAAAAAAPC3Mm23bSqtl/FBZe37fj21XsYHleFROChMpjCfwnwK8ynMpzCfwnwK8ynMpzCfwnwK8ynMpzCfwnzHL+zmn8Kv1qt42VgqxsvvHl7qg61TdkxDxTycH4Xnda4NTq1Tdiz9uyytU3bc3lZ4bZ2y4/h7WD2Hw/o8h9W5/3oOy6miPJ+l97E62DrldeH3Yd3x32kU5lOYT2E+hfkU5lOYT2E+hfkU5lOYT2E+hfkU5lOYT2G+43+PP07bdTn0PxUAAAAAAAAAAAAAAAAAAAAAeI9vi3YKEWGaeQwAAAAASUVORK5CYII='), auto; */
+      }
+      html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        /* align-items: center; */
+        background-color: #f0f0f0;
+      }
+      .container {
+        position: fixed;
+        background-image: url("bg2.jpg");
+        background-image: cover;
+
+        height: 120vh;
+        width: 100vw;
+      }
+
+      .gun-container {
+        width: 200px;
+        height: 200px;
+        perspective: 1000px;
+        position: absolute;
+        bottom: 180px;
+        left: 500px;
+
+        /* cursor:url('downlaod.png'),auto; */
+        cursor: url("downlaod.png"), auto;
+      }
+
+      .gun {
+        width: 40vw;
+
+        transform-style: preserve-3d;
+        transform: rotateY(0deg);
+        transition: transform 0.1s;
+      }
+      .crosshair {
+        width: 50px;
+      }
+      .target {
+        display: flex;
+        justify-content: space-around;
+        /* align-items: center; */
+        align-items: end;
+        height: 90vh;
+      }
+      .terror {
+        /* border: 2px red solid; */
+        filter: contrast(1.5);
+        height: 150px;
+        z-index: -1;
+        /* background: red; */
+      }
+      /* .flash{
+        height:50px;
+      } */
+      .score {
+        height: 50px;
+        width: 300px;
+        background-color: rgba(29, 29, 29, 0.725);
+        position: absolute;
+        border: 2px solid black;
+        border-radius: 25px;
+        right: 100px;
+        top: 50px;
+        color: yellow;
+        display: flex;
+        /* justify-content: center; */
+        align-items: center;
+        font: bold;
+        font-size: 40px;
+        padding: 25px;
+      }
+      .tilt
+      {
+        transform: rotateY(160deg);
+      }
+      .point {
+        margin: 5px;
+      }
+
+      .gun img {
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="gun-container">
+        <div class="gun" id="gun">
+          <img src="download.png" alt="Gun Image" />
+        </div>
+      </div>
+      
+      <div class="cursor rounded">
+        <img class="crosshair" src="crosshair.png" alt="" />
+      </div>
+
+      <div class="target">
+        <div class="box">
+          <img class="terror" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror tilt" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror tilt" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror tilt" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror tilt" src="terror.png" alt="" />
+        </div>
+      </div>
+      
+
+      <img class="flash" src="flash.png" alt="" />
+    </div>
+    <div class="score">
+      <div class>Score:</div>
+      <div class="point">0</div>
+    </div>
+    <script>
+      const image = document.getElementById("gun");
+      const screenWidth = window.innerWidth;
+
+      document.addEventListener("mousemove", (e) => {
+        const mouseX = e.clientX;
+        const rotateY = (mouseX / screenWidth - 0.5) * 2 * 45; // Adjust multiplier for sensitivity
+        image.style.transform = `rotateY(${-rotateY}deg)`;
+      });
+
+      document.addEventListener("mouseleave", () => {
+        image.style.transform = "-rotateY(0deg)";
+      });
+
+      ///////////////////////////////
+      const cursorRounded = document.querySelector(".rounded");
+      const cursorPointed = document.querySelector(".pointed");
+
+      const moveCursor = (e) => {
+        const mouseY = e.clientY;
+        const mouseX = e.clientX;
+        let a = mouseX - 25;
+        let b = mouseY + 47;
+
+        cursorRounded.style.transform = `translate3d(${a}px, ${b}px, 0)`;
+
+        cursorPointed.style.transform = `translate3d(${a}px, ${b}px, 0)`;
+      };
+
+      window.addEventListener("mousemove", moveCursor);
+
+      ///////////---------------------------------///////////////////
+
+      document.querySelectorAll(".terror").forEach((img) => {
+        img.addEventListener("click", () => {
+          img.style.width = "0";
+          img.style.height = "0";
+          document.querySelector(".point").innerText =
+            parseInt(document.querySelector(".point").innerText) + 1;
+        });
+      });
+      
+    </script>
+  </body>
+</html>

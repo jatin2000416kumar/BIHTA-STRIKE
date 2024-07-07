@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BIHTA-STRIKE</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap"
+    />
+    <link rel="stylesheet" href="./css/output.css" />
+    <style>
+      @font-face {
+        font-family: "CounterStrike";
+        src: url("fonts/CounterStrike.ttf") format("truetype");
+      }
+
+      body {
+        font-family: "Orbitron", "CounterStrike", sans-serif;
+      }
+
+      .container {
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      p {
+        font-size: 1.5rem;
+      }
+
+      body {
+        cursor: circle;
+      }
+      body {
+        overflow: hidden;
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f0f0;
+        /* cursor: none; Hides the cursor */
+      }
+      html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        background-color: #f0f0f0;
+      }
+      .container {
+        position: fixed;
+        background-image: url("bg2.jpg");
+        background-size: cover;
+        background-position: bottom;
+        height: 120vh;
+        width: 100vw;
+        display: none; /* Hide the game container initially */
+        cursor: none;
+      }
+      #gameContainer4 {
+        background-image: url("bg5.jpg");
+        background-size: cover;
+        background-position: bottom;
+      }
+      #gameContainer3 {
+        background-image: url("bg8.jpg");
+        background-size: cover;
+        background-position: bottom;
+      }
+      #gameContainer2 {
+        background-image: url("admin.jpg");
+        background-size: cover;
+        background-position: bottom;
+      }
+      #gameContainer2 > .terror {
+        justify-content: space-between;
+        align-items: end;
+        /* height:80vh; */
+      }
+      .lvl3 {
+        display: flex;
+      }
+
+      .gun-container {
+        width: 200px;
+        height: 200px;
+        perspective: 1000px;
+        position: absolute;
+        bottom: 180px;
+        left: 500px;
+        cursor: url("download.png"), auto;
+        position: absolute;
+        z-index: 4;
+      }
+
+      .gun {
+        width: 40vw;
+        transform-style: preserve-3d;
+        transform: rotateY(0deg);
+        transition: transform 0.1s;
+      }
+      .crosshair {
+        width: 50px;
+        position: absolute;
+        z-index: 5;
+      }
+      .target1 {
+        display: flex;
+        justify-content: space-around;
+        align-items: end;
+        height: 70vh;
+      }
+      .target2 {
+        display: flex;
+        justify-content: space-between;
+        padding: 0vh, 0;
+        align-items: end;
+        height: 80vh;
+      }
+      .target3 {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        height: 80vh;
+      }
+      .target4 {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        height: 70vh;
+      }
+      .terror {
+        filter: contrast(1.5);
+        height: 150px;
+        z-index: -1;
+        text-shadow: #000000;
+      }
+      .score {
+        height: 50px;
+        width: 300px;
+        background-color: rgba(29, 29, 29, 0.725);
+        position: absolute;
+        border: 2px solid black;
+        border-radius: 25px;
+        right: 100px;
+        top: 50px;
+        color: yellow;
+        display: flex;
+        align-items: center;
+        font: bold;
+        font-size: 40px;
+        padding: 25px;
+        /* flex-direction: column; */
+      }
+      .tilt {
+        transform: rotateY(160deg);
+      }
+      .point {
+        margin: 5px;
+      }
+      .gun img {
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Instructions Screen Styles */
+      .instructions {
+        color: #ffd700;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 100vh;
+        width: 100vw;
+        background-repeat: no-repeat;
+        background-color: #000000;
+        background-size: cover;
+        justify-content: end;
+        /* align-items: end; */
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        background-image: url("cs.webp");
+      }
+      #spark1 {
+        transition: opacity 0.1s ease-in-out;
+      }
+      #spark3 {
+        transform :translate(+90px,-200px);
+      }
+
+      .blink {
+        opacity: 0;
+      }
+
+      #gamename {
+        font-size: 4rem;
+        text-decoration: wavy;
+        text-decoration: underline;
+
+        font-weight: 900;
+        margin-bottom: 40px;
+      }
+      .instructions button {
+        background: rgba(83, 54, 201, 0.371);
+        font-size: 2rem;
+        padding: 10px 20px;
+        cursor: pointer;
+        color: white;
+      }
+      #play-button {
+        opacity: 0;
+      }
+
+      .instructions li {
+        font-size: 1.5rem;
+        color: rgb(14, 209, 37);
+        font-weight: 900;
+        margin-bottom: 40px;
+      }
+      .next {
+        position: relative;
+        transform: translate(600px, 700px);
+        z-index: 5;
+      }
+      .next-button {
+        height: 10vh;
+        width: 10vw;
+        background: #230a885d;
+        color: rgb(226, 242, 1);
+        font-size: xx-large;
+      }
+      .flash {
+        transform: translate(85px, -130px);
+        position: relative;
+        z-index: 2;
+        display:none;
+      }
+      .flex {
+        display: flex;
+      }
+      #para {
+        color: rgb(255, 255, 255);
+        width: 40vw;
+        height: 5vh;
+        
+      }
+      #spark2{
+        transform:translate(85px, -200px);
+      }
+      #in{
+        list-style-type: none;
+        border: white 1px solid;
+        border-radius: 10px;
+        background-color: #000000;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items:start;
+        padding: 10px;
+
+      }
+      #l1,#l2{
+        font-weight:100;
+      color:green;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Instructions Screen -->
+    <div class="instructions" id="instructions">
+      <div id="gamename"></div>
+      <p id="para" color="white"></p>
+      <ul id ="in">
+        <li id ="l1"></li>
+        <li id ="l2"></li>
+      </ul>
+      <button id="play-button" onclick="pause1(), startGame()">Play</button>
+    </div>
+
+    <!-- Game Container 1 -->
+    <div class="container" id="gameContainer1">
+      <div class="gun-container">
+        <div class="gun" id="gun1">
+          <img src="download.png" alt="Gun Image" />
+        </div>
+      </div>
+      <div class="next">
+        <button class="next-button" onclick="nextLevel()">Next >>></button>
+      </div>
+
+      <div class="cursor rounded">
+        <img class="crosshair" src="crosshair.png" alt="" />
+      </div>
+
+      <div class="target1">
+        <div class="box">
+          <img class="terror" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror tilt" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror tilt" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror tilt" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror tilt" src="terror.png" alt="" />
+        </div>
+      </div>
+      <img class="flash" id="spark1" src="flash.png" alt="" />
+    </div>
+
+    <!-- Game Container 2 -->
+    <div class="container" id="gameContainer2">
+      <div class="gun-container">
+        <div class="gun" id="gun2">
+          <img src="download.png" alt="Gun Image" />
+        </div>
+      </div>
+      <div class="next">
+        <button class="next-button" onclick="nextLevel()">Next >>></button>
+      </div>
+
+      <div class="cursor rounded">
+        <img class="crosshair" src="crosshair.png" alt="" />
+      </div>
+
+      <div class="target2">
+        <div class="box">
+          <img class="terror" src="terror.png" alt="" />
+        </div>
+
+        <div class="box">
+          <img class="terror tilt" src="terror.png" alt="" />
+        </div>
+      </div>
+      <img class="flash" id="spark2" src="flash.png" alt="" />
+    </div>
+
+    <!-- Game Container 3 -->
+    <div class="container" id="gameContainer3">
+      <div class="gun-container">
+        <div class="gun" id="gun3">
+          <img src="download.png" alt="Gun Image" />
+        </div>
+      </div>
+      <div class="next">
+        <button class="next-button" onclick="nextLevel()">Next >>></button>
+      </div>
+
+      <div class="cursor rounded">
+        <img class="crosshair" src="crosshair.png" alt="" />
+      </div>
+
+      <div class="target3">
+        <div classs="flex lvl3">
+          <div class="box">
+            <img class="terror" src="terror.png" alt="" />
+          </div>
+        </div>
+        <div class="flex">
+          <div class="box">
+            <img class="terror tilt" src="terror.png" alt="" />
+          </div>
+          <div class="box">
+            <img class="terror tilt" src="terror.png" alt="" />
+          </div>
+          <div class="box">
+            <img class="terror tilt" src="terror.png" alt="" />
+          </div>
+        </div>
+      </div>
+      <img class="flash" id="spark3" src="flash.png" alt="" />
+    </div>
+
+    <!-- Game Container 4 -->
+    <div class="container" id="gameContainer4">
+      <div class="gun-container">
+        <div class="gun" id="gun4">
+          <img src="download.png" alt="Gun Image" />
+        </div>
+      </div>
+      <div class="next">
+        <button class="next-button" onclick="nextLevel()">Next >>></button>
+      </div>
+
+      <div class="cursor rounded">
+        <img class="crosshair" src="crosshair.png" alt="" />
+      </div>
+
+      <div class="target4">
+        <div class="box">
+          <img class="terror" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror tilt" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror tilt" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror tilt" src="terror.png" alt="" />
+        </div>
+        <div class="box">
+          <img class="terror tilt" src="terror.png" alt="" />
+        </div>
+      </div>
+      <img class="flash" id="spark4" src="flash.png" alt="" />
+    </div>
+
+    <div class="score">
+      <div>Score:</div>
+      <div class="point">0</div>
+    </div>
+
+    <audio id="bgm" src="bgm.mp3"></audio>
+    <audio id="fire" src="fire.mp3"></audio>
+    <audio id="type" src="type.mp3"></audio>
+    <audio id="go" src="go.mp3"></audio>
+    <audio id="sus" src="sus.mp3"></audio>
+    <audio id="roger" src="roger.mp3"></audio>
+    <audio id="ene" src="ene.mp3"></audio>
+
+    <script>
+      alert("click any where to play the game ");
+      let bgm = document.getElementById("bgm");
+      bg();
+      function bg() {
+        console.log("bgm");
+        bgm.play();
+        bgm.volume = 0.2;
+      }
+
+      var m = 0;
+      var txt = ".     BIHTA-STRIKE     .";
+      var speed = 50;
+
+      var b = 0;
+      var txt1 =
+        "ISIS has launched an attack on IIT Patna, one of India's most prestigious college";
+      var speed = 50;
+
+      function typeWriter() {
+        if (m < txt.length) {
+          document.getElementById("gamename").innerHTML += txt.charAt(m);
+          m++;
+          setTimeout(typeWriter, speed);
+          document.getElementById("gamename").style.background =
+            "rgba(0,0,0,0.6)";
+          document.getElementById("gamename").style.border = "2px solid white";
+          document.getElementById("gamename").style.borderRadius = "10px";
+          document.getElementById("gamename").style.textShadow = "black";
+        }
+      }
+      function typeWriter1() {
+        if (b < txt1.length) {
+          document.getElementById("para").innerHTML += txt1.charAt(b);
+          b++;
+          setTimeout(typeWriter1, speed);
+        }
+      }
+      let type = document.getElementById("type");
+      let sus = document.getElementById("sus");
+      let go = document.getElementById("go");
+      let l = 0;
+
+      document.getElementById("instructions").addEventListener("click", (e) => {
+        console.log("bgm");
+        if (l == 0) {
+          l++;
+          bgm.play();
+          bgm.volume = 0.2;
+          typeWriter();
+          type.play();
+          typeWriter1();
+          typeWriter3();
+          typeWriter4();
+          document.getElementById("play-button").style.opacity = 1;
+        }
+      });
+      function pause1() {
+        console.log("pause1");
+        bgm.pause();
+      }
+
+
+
+      var l1 = 0;
+      var txt10 = "> Kill all the terrorists to win";
+      var speed = 50;
+
+      function typeWriter3() {
+        if (l1< txt1.length) {
+          document.getElementById("l1").innerHTML += txt10.charAt(l1);
+          l1++;
+          setTimeout(typeWriter3, speed);
+        }
+      }
+
+      var l2 = 0;
+      var txt11 = "> You are deployed to save IIT Patna from terrorists";
+      var speed = 50;
+
+      function typeWriter4() {
+        if (l2< txt11.length) {
+          document.getElementById("l2").innerHTML += txt11.charAt(l2);
+          l2++;
+          setTimeout(typeWriter4, speed);
+        }
+      }
+
+      const guns = document.querySelectorAll(".gun");
+      const screenWidth = window.innerWidth;
+
+      document.addEventListener("mousemove", (e) => {
+        const mouseX = e.clientX;
+        const rotateY = (mouseX / screenWidth - 0.5) * 2 * 45; // Adjust multiplier for sensitivity
+        guns.forEach((gun) => {
+          gun.style.transform = `rotateY(${-rotateY}deg)`;
+        });
+      });
+
+      document.addEventListener("mouseleave", () => {
+        guns.forEach((gun) => {
+          gun.style.transform = "-rotateY(0deg)";
+        });
+      });
+
+      const cursorRounded = document.querySelectorAll(".rounded");
+
+      const moveCursor = (e) => {
+        const mouseY = e.clientY;
+        const mouseX = e.clientX;
+        let a = mouseX - 790;
+        let b = mouseY - 50;
+
+        cursorRounded.forEach((cursor) => {
+          cursor.style.transform = `translate3d(${a}px, ${b}px, 0)`;
+        });
+      };
+
+      window.addEventListener("mousemove", moveCursor);
+
+      document.querySelectorAll(".terror").forEach((img) => {
+        img.addEventListener("click", () => {
+          img.style.width = "0";
+          img.style.height = "0";
+          document.querySelector(".point").innerText =
+            parseInt(document.querySelector(".point").innerText) + 1;
+        });
+      });
+
+      function startGame() {
+        type.pause();
+        go.play();
+        sus.play();
+        // ammi.play();
+        document.getElementById("instructions").style.display = "none";
+        document.getElementById("gameContainer1").style.display = "block";
+      }
+      let roger = document.getElementById("roger");
+      let ene = document.getElementById("ene");
+
+      function nextLevel() {
+        const currentLevel = document.querySelector(
+          ".container:not([style*='display: none'])"
+        );
+        currentLevel.style.display = "none";
+        if (
+          currentLevel.nextElementSibling &&
+          currentLevel.nextElementSibling.classList.contains("container")
+        ) {
+          currentLevel.nextElementSibling.style.display = "block";
+          roger.play();
+        } else {
+          ene.play();
+
+          alert("No more levels!");
+        }
+      }
+
+      document.querySelectorAll(".container").forEach((container) => {
+        container.addEventListener("click", () => {
+          console.log(document.getElementById("fire"));
+          fire.play();
+        });
+      });
+
+      // document
+      //   .getElementById("gameContainer1")
+      //   .addEventListener("click", () => {
+      //     // console.log(document.getElementsByClassName("flash"));
+      //     const x = document.getElementById("spark1");
+      //     if (x.style.display === "none") {
+      //       x.style.display = "block";
+      //       // setTimeout(() => {
+      //       //   x.style.display = "none";
+      //       // }, 1000);
+      //     }
+      //     // document.getElementById("spark1").style.display = "none";
+      //   });
+      // document.getElementById("gameContainer1").addEventListener("click", () => {
+      //   // console.log(document.getElementsByClassName("flash"));
+      //   const x = document.getElementById("spark1");
+      //   if(x.style.display === "none"){
+      //     x.style.display = "inline";
+      //   }
+      //   else{
+      //     x.style.display = "none";
+      //   }
+      //   // document.getElementById("spark1").style.display = "none";
+      // },1000);
+      // document
+      //   .getElementById("gameContainer1")
+      //   .addEventListener("click", function () {
+
+      //     var sparkImage = document.getElementById("spark1");
+      //     sparkImage.classList.add("blink");
+
+      //     setTimeout(function () {
+      //       sparkImage.classList.remove("blink");
+      //     }, 100); // Blink duration (500ms in this example)
+      //   });
+      document
+        .getElementById("gameContainer1")
+        .addEventListener("click", function () {
+          var sparkImage = document.getElementById("spark1");
+
+          sparkImage.style.display = "inline";
+          setTimeout(function () {
+            sparkImage.classList.add("blink");
+          }, 10); // Small delay to allow the display change to take effect
+
+          setTimeout(function () {
+            sparkImage.classList.remove("blink");
+            sparkImage.style.display = "none";
+          }, 510); // Blink duration (500ms) + delay
+        });
+        document
+        .getElementById("gameContainer1")
+        .addEventListener("click", function () {
+          var sparkImage = document.getElementById("spark1");
+
+          sparkImage.style.display = "inline";
+          setTimeout(function () {
+            sparkImage.classList.add("blink");
+          }, 50); // Small delay to allow the display change to take effect
+
+          setTimeout(function () {
+            sparkImage.classList.remove("blink");
+            sparkImage.style.display = "none";
+          }, 510); // Blink duration (500ms) + delay
+        });
+        document
+        .getElementById("gameContainer2")
+        .addEventListener("click", function () {
+          var sparkImage = document.getElementById("spark2");
+
+          sparkImage.style.display = "inline";
+          setTimeout(function () {
+            sparkImage.classList.add("blink");
+          }, 50); // Small delay to allow the display change to take effect
+
+          setTimeout(function () {
+            sparkImage.classList.remove("blink");
+            sparkImage.style.display = "none";
+          }, 510); // Blink duration (500ms) + delay
+        });
+        document
+        .getElementById("gameContainer3")
+        .addEventListener("click", function () {
+          var sparkImage = document.getElementById("spark3");
+
+          sparkImage.style.display = "inline";
+          setTimeout(function () {
+            sparkImage.classList.add("blink");
+          }, 50); // Small delay to allow the display change to take effect
+
+          setTimeout(function () {
+            sparkImage.classList.remove("blink");
+            sparkImage.style.display = "none";
+          }, 510); // Blink duration (500ms) + delay
+        });
+        document
+        .getElementById("gameContainer4")
+        .addEventListener("click", function () {
+          var sparkImage = document.getElementById("spark4");
+          fire.play();
+
+          sparkImage.style.display = "inline";
+          setTimeout(function () {
+            sparkImage.classList.add("blink");
+          }, 50); // Small delay to allow the display change to take effect
+
+          setTimeout(function () {
+            sparkImage.classList.remove("blink");
+            sparkImage.style.display = "none";
+          }, 510); // Blink duration (500ms) + delay
+        });
+
+    </script>
+  </body>
+</html>
